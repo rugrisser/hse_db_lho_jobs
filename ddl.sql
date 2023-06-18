@@ -1,7 +1,5 @@
 create database lho_jobs;
 
-\c lho_jobs
-
 set search_path = 'public';
 
 create table cities(
@@ -44,7 +42,7 @@ create table applicants(
     constraint applicants_pk primary key (id),
     constraint city_fk foreign key (city_id)
         references cities
-        on update cascade
+        on update restrict
         on delete restrict
 );
 
@@ -59,11 +57,11 @@ create table vacancies(
     constraint vacancies_pk primary key (id),
     constraint employer_fk foreign key (employer_id)
         references employers
-        on update cascade
+        on update restrict
         on delete cascade,
     constraint city_fk foreign key (city_id)
         references cities
-        on update cascade
+        on update restrict
         on delete restrict
 );
 
@@ -74,11 +72,11 @@ create table vacancies_disabilities(
     constraint vd_pk primary key (vacancy_id, disability_id),
     constraint vacancy_fk foreign key (vacancy_id)
         references vacancies
-        on update cascade
+        on update restrict
         on delete cascade,
     constraint disabilities_fk foreign key (disability_id)
         references disabilities
-        on update cascade
+        on update restrict
         on delete cascade
 );
 
@@ -89,11 +87,11 @@ create table applicants_disabilities(
     constraint ad_pk primary key (applicant_id, disability_id),
     constraint applicant_fk foreign key (applicant_id)
         references applicants
-        on update cascade
+        on update restrict
         on delete cascade,
     constraint disabilities_fk foreign key (disability_id)
         references disabilities
-        on update cascade
+        on update restrict
         on delete cascade
 );
 
@@ -106,10 +104,10 @@ create table responses(
     constraint responses_pk primary key (vacancy_id, applicant_id),
     constraint vacancy_fk foreign key (vacancy_id)
         references vacancies
-        on update cascade
+        on update restrict
         on delete cascade,
     constraint applicant_fk foreign key (applicant_id)
         references applicants
-        on update cascade
+        on update restrict 
         on delete cascade
 );
