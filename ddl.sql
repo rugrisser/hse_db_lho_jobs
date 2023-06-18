@@ -1,5 +1,7 @@
 create database lho_jobs;
 
+\c lho_jobs
+
 set search_path = 'public';
 
 create table cities(
@@ -40,19 +42,29 @@ create table applicants(
     city_id int not null,
 
     constraint applicants_pk primary key (id),
-    constraint city_fk foreign key (city_id) references cities
+    constraint city_fk foreign key (city_id)
+        references cities
+        on update cascade
+        on delete restrict
 );
 
 create table vacancies(
     id serial not null,
     employer_id int not null,
     city_id int not null,
+    is_active bool not null default true,
     name varchar(100) not null,
     job_description text not null default '',
 
     constraint vacancies_pk primary key (id),
-    constraint employer_fk foreign key (employer_id) references employers,
-    constraint city_fk foreign key (city_id) references cities
+    constraint employer_fk foreign key (employer_id)
+        references employers
+        on update cascade
+        on delete cascade,
+    constraint city_fk foreign key (city_id)
+        references cities
+        on update cascade
+        on delete restrict
 );
 
 create table vacancies_disabilities(
@@ -60,8 +72,14 @@ create table vacancies_disabilities(
     disability_id int not null,
 
     constraint vd_pk primary key (vacancy_id, disability_id),
-    constraint vacancy_fk foreign key (vacancy_id) references vacancies,
-    constraint disabilities_fk foreign key (disability_id) references disabilities
+    constraint vacancy_fk foreign key (vacancy_id)
+        references vacancies
+        on update cascade
+        on delete cascade,
+    constraint disabilities_fk foreign key (disability_id)
+        references disabilities
+        on update cascade
+        on delete cascade
 );
 
 create table applicants_disabilities(
@@ -69,17 +87,29 @@ create table applicants_disabilities(
     disability_id int not null,
 
     constraint ad_pk primary key (applicant_id, disability_id),
-    constraint applicant_fk foreign key (applicant_id) references applicants,
-    constraint disabilities_fk foreign key (disability_id) references disabilities
+    constraint applicant_fk foreign key (applicant_id)
+        references applicants
+        on update cascade
+        on delete cascade,
+    constraint disabilities_fk foreign key (disability_id)
+        references disabilities
+        on update cascade
+        on delete cascade
 );
 
 create table responses(
     vacancy_id int not null,
-    employee_id int not null,
+    applicant_id int not null,
     sent_time timestamp not null,
     cover_letter text,
 
-    constraint responses_pk primary key (vacancy_id, employee_id),
-    constraint vacancy_fk foreign key (vacancy_id) references vacancies,
-    constraint employee_fk foreign key (employee_id) references employers
+    constraint responses_pk primary key (vacancy_id, applicant_id),
+    constraint vacancy_fk foreign key (vacancy_id)
+        references vacancies
+        on update cascade
+        on delete cascade,
+    constraint applicant_fk foreign key (applicant_id)
+        references applicants
+        on update cascade
+        on delete cascade
 );
