@@ -108,6 +108,6 @@ create table responses(
         on delete cascade,
     constraint applicant_fk foreign key (applicant_id)
         references applicants
-        on update restrict 
+        on update restrict
         on delete cascade
 );
