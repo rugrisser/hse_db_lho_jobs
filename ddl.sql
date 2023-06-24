@@ -2,6 +2,14 @@ create database lho_jobs;
 
 set search_path = 'public';
 
+create or replace function random_between(low int, high int)
+    returns int as
+$$
+begin
+    return floor(random() * (high - low + 1) + low);
+end;
+$$ language 'plpgsql' strict;
+
 create table cities(
     id serial not null,
     name varchar(100) not null,
@@ -28,6 +36,18 @@ create table employers(
     phone_number varchar(20) not null,
 
     constraint employers_pk primary key (id)
+);
+
+create table employers_to_auth_codes(
+    id serial not null,
+    employer_id int not null,
+    code int not null default random_between(100000, 999999),
+
+    constraint employers_to_auth_codes_pk primary key (id, employer_id),
+    constraint employers_fk foreign key (employer_id)
+        references employers
+        on update restrict
+        on delete cascade
 );
 
 create table applicants(
