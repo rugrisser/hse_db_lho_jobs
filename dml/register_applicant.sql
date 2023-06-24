@@ -3,8 +3,8 @@
 begin transaction isolation level repeatable read;
 
 insert into lho_jobs.public.applicants
-(name, email, password_hash, city_id) VALUES
-(:name, :email, :pwd_hash, :city_id);
+(name, email, password_hash, city_id, phone_number) VALUES
+(:name, :email, :pwd_hash, :city_id, :phone_number);
 
 -- repeat for every disability
 insert into lho_jobs.public.applicants_disabilities

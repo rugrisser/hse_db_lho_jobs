@@ -25,7 +25,7 @@ create table employers(
     email varchar(255) not null,
     company_description text,
     web_site_link varchar(255),
-    phone varchar(20) not null,
+    phone_number varchar(20) not null,
 
     constraint employers_pk primary key (id)
 );
@@ -34,6 +34,7 @@ create table applicants(
     id serial not null,
     name varchar(100) not null,
     email varchar(100) not null,
+    phone_number varchar(20) not null,
     password_hash varchar(255) not null,
     photo_url varchar(255) default null,
     resume text not null default '',
